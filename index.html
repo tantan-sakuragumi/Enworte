@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Enworte</title>
+        <style>
+  
+        </style>
+    </head>
+    <body>
+        <h1>Enworte ~English Word Test~</h1>
+        <ol id="questions"></ol>
+        <script>
+const data = [
+    "I want (to) fly.",
+    "I (can) do it!",
+    "I (love) you."
+]
+document.getElementById("questions").innerHTML = data.map(english => `
+    <li>
+        ${english.replace(/\((.+?)\)/g, '<input data-answer="$1">')}
+        <button class="speak">speak</button>
+        <button class="check">check the answer</button>
+    </li>
+`).join("");
+
+for (const btn of document.getElementsByClassName("speak")) {
+    btn.addEventListener("click", () => {
+        const ssh = new SpeechSynthesisUtterance();
+        ssh.lang = "en";
+        ssh.text = data[[...document.getElementsByClassName("speak")].indexOf(btn)]
+        speechSynthesis.speak(ssh);
+        
+    });
+}
+
+/*
+document.getElementById("check").addEventListener("click", () => {
+    for (const input of document.getElementsByTagName("input")) {
+        if (input.value === input.dataset.answer) {
+            input.parentNode.classList.add("correct");
+        } else {
+            input.parentNode.classList.remove("correct");
+        }
+    }
+});
+*/
+        </script>
+    </body>
+</html>

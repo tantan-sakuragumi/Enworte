@@ -3,12 +3,37 @@
     <head>
         <title>Enworte</title>
         <style>
-  
+body {
+    background-color: #cfe;
+    font-size: 1.3em;
+}
+li {
+    margin-top: 1em ;
+}
+.correct::before {
+    content: "🌸";
+}
+.show::after {
+    content: attr(data-answer);
+    color: red;
+}
+input {
+    background-color: transparent;
+    border:none;
+    border-bottom: solid #254 0.1em;
+    font-size: 1.4em;
+    height: 2rem;
+    width: 8rem;
+}
+button {
+    font-size: 1em;
+}
         </style>
     </head>
     <body>
         <h1>Enworte ~English Word Test~</h1>
         <ol id="questions"></ol>
+        <button id="checkAll">check all answers</button>
         <script>
 const data = [
     "I want (to) fly.",
@@ -17,9 +42,10 @@ const data = [
 ]
 document.getElementById("questions").innerHTML = data.map(english => `
     <li>
-        ${english.replace(/\((.+?)\)/g, '<input data-answer="$1">')}
+        ${english.replace(/\((.+?)\)/g, '<span data-answer="$1"><input></span>')}
         <button class="speak">speak</button>
-        <button class="check">check the answer</button>
+        <button class="check">check your answer</button>
+        <button class="show">show the correct answer</button>
     </li>
 `).join("");
 
@@ -32,18 +58,24 @@ for (const btn of document.getElementsByClassName("speak")) {
         
     });
 }
-
-/*
-document.getElementById("check").addEventListener("click", () => {
-    for (const input of document.getElementsByTagName("input")) {
-        if (input.value === input.dataset.answer) {
-            input.parentNode.classList.add("correct");
-        } else {
-            input.parentNode.classList.remove("correct");
-        }
+for (const btn of document.getElementsByClassName("check")) {
+    btn.addEventListener("click", () => {
+        const input = btn.parentElement.getElementsByTagName("input")[0];
+        input.parentElement.classList[(input.value === input.parentElement.dataset.answer && !input.parentElement.classList.contains("correct")) ? "add" : "remove"]("correct");
+    });
+}
+for (const btn of document.getElementsByClassName("show")) {
+    btn.addEventListener("click", () => {
+        btn.parentElement.getElementsByTagName("span")[0].classList.toggle("show");
+    });
+}
+document.getElementById("checkAll").addEventListener("click", () => {
+    for (const span of document.getElementsByTagName("span")) {
+        const input = span.getElementsByTagName("input")[0];
+        if (input.value === span.dataset.answer) span.classList.add("correct");
+        span.classList.add("show");
     }
 });
-*/
         </script>
     </body>
 </html>
